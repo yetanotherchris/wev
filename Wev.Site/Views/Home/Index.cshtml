@@ -1,0 +1,59 @@
+﻿@model List<EntrySummary>
+
+@{
+	ViewBag.Title = "WEV - Web Event Viewer";
+}
+
+<div id="filter">
+	<div style="padding-top:2px">
+		<div class="left">
+		@using (Html.BeginForm("Index","Home",FormMethod.Get))
+		{
+			<span title="Filter by the event source for the event.">Source:&nbsp;</span> @Html.TextBox("source", ViewData["source"])
+			<span title="Filter the types of event shown.">&nbsp;Type:&nbsp;</span> @Html.DropDownBox("entryType", new Dictionary<string, string>() { { "0", "All" }, { "1", "Error" }, { "2", "Warning" }, { "4", "Information" } }, ViewData["entryType"].ToString())
+			<span title="The number of event items to display on the page.">&nbsp;Max items per page:</span> @Html.TextBox("maxItems", ViewData["maxItems"], new { style = "width:50px" })
+			<span title="Filter by the server name.">&nbsp;Server:</span>@Html.TextBox("server", ViewData["server"], new { style = "width:60px" })
+			<span title="Filter the body text for each event.">&nbsp;Message text filter:</span>@Html.TextBox("messageFilter", ViewData["messageFilter"])
+			<span title="This can be a date in the US or UK format e.g., dd-mm-yyyy or mm/dd/yyyy. Some constants also available: today, yesterday, thisweek, lastweek, thismonth, lastmonth." style="cursor:help">
+				&nbsp;Date range:</span>@Html.TextBox("startDate", ViewData["startDate"], new { style = "width:50px;" }) <span>&nbsp;-&nbsp;</span>@Html.TextBox("endDate", ViewData["endDate"], new { style = "width:50px;" })
+			<input type="submit" value="Apply" id="applybutton" />
+		}
+		</div>
+
+		<div id="refresh" class="right">
+			<a href="@Url.Action("Refresh")" id="refreshlink"><img src="@Url.Content("~/Assets/Images/refresh.png")" border="0" alt="Refresh the entries from the event log" />Refresh</a>
+		</div>
+	</div>
+</div>
+
+<div id="content">
+@{
+	DateTime currentDate = DateTime.MinValue;  
+}
+
+@foreach (EntrySummary entry in Model)
+{
+	if (entry.TimeGenerated.Date != currentDate.Date)
+	{
+		currentDate = entry.TimeGenerated;
+		<h3 class="day">@entry.TimeGenerated.Date.ToString("MMMM dd, yyyy")</h3>
+	}
+	
+	<div class="entry-container">
+		<div class="left entrytype">
+			<div class="entry@(entry.EntryType)"></div>
+		</div>
+		<div class="left entrytime">@entry.TimeGenerated.ToShortTimeString()</div>
+		<div class="left entrysource">@entry.Source</div>
+		<div class="left entrycategory">@entry.Category</div>
+		<div class="left entrymachine">@entry.MachineDisplayName</div>
+		<div class="left entryshow"><a href="javascript:;" rel="@entry.Id" class="toggle">Show/hide</a></div>
+		<div id="@entry.Id" style="display:none"></div>
+		<br style="clear:both;" />
+	</div>
+}
+</div>
+
+<div id="footer">
+	This is server @System.Environment.MachineName - Last refreshed at @ViewData["lastUpdate"] <br />
+</div>
