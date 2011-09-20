@@ -9,10 +9,7 @@ namespace Wev.Core
 {
 	public class WevApplication : System.Web.HttpApplication
 	{
-		/// <summary>
-		/// Gets the file system path to the App_Data root, equivalent of Server.MapPath("~/App_Data/")
-		/// </summary>
-		public static string AppDataPath { get; private set; }
+
 
 		public static void RegisterGlobalFilters(GlobalFilterCollection filters)
 		{
@@ -33,7 +30,7 @@ namespace Wev.Core
 
 		protected void Application_Start()
 		{
-			AppDataPath = Server.MapPath("~/App_Data/");
+			LogWorker.Current.AppDataPath = Server.MapPath("~/App_Data/");
 			AreaRegistration.RegisterAllAreas();
 
 			RegisterGlobalFilters(GlobalFilters.Filters);

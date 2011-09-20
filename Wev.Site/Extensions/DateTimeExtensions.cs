@@ -5,7 +5,7 @@ using System.Web;
 using System.Globalization;
 using System.Threading;
 
-namespace Wev.Core
+namespace Wev.Site
 {
 	/// <summary>
 	/// A set of extension methods for dates.

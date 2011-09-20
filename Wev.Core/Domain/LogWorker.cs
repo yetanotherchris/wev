@@ -20,6 +20,11 @@ namespace Wev.Core
 		private DateTime _lastUpdate;
 		private object _lockObject = new object();
 
+		/// <summary>
+		/// Gets the file system path to the App_Data root, equivalent of Server.MapPath("~/App_Data/")
+		/// </summary>
+		public string AppDataPath { get; set; }
+
 		private LogWorker()
 		{
 		}
@@ -95,7 +100,7 @@ namespace Wev.Core
 
 				foreach (ServerElement element in WevSection.Current.Servers)
 				{
-					string filename = string.Format(@"{0}\{1}.xml", WevApplication.AppDataPath, element.DisplayName);
+					string filename = string.Format(@"{0}\{1}.xml", AppDataPath, element.DisplayName);
 
 					try
 					{

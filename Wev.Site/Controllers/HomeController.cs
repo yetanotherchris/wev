@@ -8,8 +8,9 @@ using System.Net;
 using System.Text;
 using System.Web.Mvc;
 using System.Xml.Serialization;
+using Wev.Core;
 
-namespace Wev.Core
+namespace Wev.Site
 {
 	public class HomeController : Controller
 	{
